@@ -3,52 +3,8 @@ const mineCells = [];
 
 let gameOver;
 
-function getCell(x, y) {
-    const grid = document.getElementById('grid');
-    for (const cell of grid.children) {
-        // console.log(cell);
-        if (cell.x === x && cell.y === y) {
-            return cell;
-        }
-    }
-    // console.log(`Failed to get cell (${x}, ${y})`);
-    return null;
-}
-
-// returns number of nearby mines, or -1 if coords contain a mine
-function getStatus(x, y) {
-    let mineCount = 0;
-    for (const cell of mineCells) {
-        if (x === cell.x && y === cell.y) {
-            return -1;
-        }
-
-        if (Math.abs(x - cell.x) <= 1 && Math.abs(y - cell.y) <= 1) {
-            mineCount++;
-        }
-    }
-
-    return mineCount;
-}
-
-function mineClicked() {
-    gameOver = true;
-    for (const mine of mineCells) {
-        const cell = getCell(mine.x, mine.y);
-        let img = '';
-        if (cell.classList.contains('clicked')) {
-            img = 'bomb_red';
-        } else if (cell.classList.contains('flagged')) {
-            img = 'bomb_x';
-        } else {
-            img = 'bomb';
-        }
-
-        if (img) {
-            cell.style.backgroundImage = `url('./assets/${img}.png')`;
-        }
-    }
-}
+// Example usage:
+setTimeout(() => createGrid(10, 10, 0.1), 1);
 
 // Function to clear all children and populate the grid
 function createGrid(width, height, mineChance) {
@@ -101,8 +57,52 @@ function createGrid(width, height, mineChance) {
         const lineBreak = document.createElement('br');
         grid.appendChild(lineBreak);
     }
+}
 
-    console.log(mineCells);
+function getCell(x, y) {
+    const grid = document.getElementById('grid');
+    for (const cell of grid.children) {
+        if (cell.x === x && cell.y === y) {
+            return cell;
+        }
+    }
+    // console.log(`Failed to get cell (${x}, ${y})`);
+    return null;
+}
+
+// returns number of nearby mines, or -1 if coords contain a mine
+function getStatus(x, y) {
+    let mineCount = 0;
+    for (const cell of mineCells) {
+        if (x === cell.x && y === cell.y) {
+            return -1;
+        }
+
+        if (Math.abs(x - cell.x) <= 1 && Math.abs(y - cell.y) <= 1) {
+            mineCount++;
+        }
+    }
+
+    return mineCount;
+}
+
+function mineClicked() {
+    gameOver = true;
+    for (const mine of mineCells) {
+        const cell = getCell(mine.x, mine.y);
+        let img = '';
+        if (cell.classList.contains('clicked')) {
+            img = 'bomb_red';
+        } else if (cell.classList.contains('flagged')) {
+            img = 'bomb_x';
+        } else {
+            img = 'bomb';
+        }
+
+        if (img) {
+            cell.style.backgroundImage = `url('./assets/${img}.png')`;
+        }
+    }
 }
 
 function cellClicked(cell) {
@@ -145,5 +145,32 @@ function cellClicked(cell) {
     }
 }
 
-// Example usage:
-setTimeout(() => createGrid(10, 10, 0.1), 1);
+let timerElements = false;
+
+function updateTimer(number) {
+    if (!timerElements) {
+        timerElements = {
+            thousands: document.getElementById('timer_thousands'),
+            hundreds: document.getElementById('timer_hundreds'),
+            tens: document.getElementById('timer_tens'),
+            ones: document.getElementById('timer_ones'),
+        }
+    }
+
+    const thousands = Math.floor(number / 1000) % 10;
+    const hundreds = Math.floor(number / 100) % 10;
+    const tens = Math.floor(number / 10) % 10;
+    const ones = number % 10;
+
+    timerElements.thousands.src = `./assets/timer_${thousands}.png`;
+    timerElements.hundreds.src = `./assets/timer_${hundreds}.png`
+    timerElements.tens.src = `./assets/timer_${tens}.png`;
+    timerElements.ones.src = `./assets/timer_${ones}.png`;
+}
+
+let timeElapsed = 0;
+setInterval(() => {
+    if (!gameOver) {
+        updateTimer(timeElapsed++);
+    }
+}, 1000);
