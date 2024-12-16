@@ -1,14 +1,49 @@
 
-const mineCells = [];
+const MIN_WIDTH = 1;
+const MAX_WIDTH = 20;
+const MIN_HEIGHT = 1;
+const MAX_HEIGHT = 20;
 
-let gameOver;
+let mineCells = [];
 
-// Example usage:
-setTimeout(() => createGrid(10, 10, 0.1), 1);
+let gridWidth = 16;
+let gridHeight = 16;
+let gameOver = false;
+let timeElapsed = 0;
+let timerElements = false;
+
+setTimeout(() => {
+    restartGame(gridWidth, gridHeight, 0.2);
+}, 1);
+
+function changeWidth(dx) {
+    gridWidth += dx;
+    if (gridWidth < MIN_WIDTH) {
+        gridWidth = MIN_WIDTH;
+    }
+    if (gridWidth > MAX_WIDTH) {
+        gridWidth = MAX_WIDTH;
+    }
+    restartGame(gridWidth, gridHeight, 0.15);
+}
+
+function changeHeight(dy) {
+    gridHeight += dy;
+    if (gridHeight < MIN_HEIGHT) {
+        gridHeight = MIN_HEIGHT;
+    }
+    if (gridHeight > MAX_HEIGHT) {
+        gridHeight = MAX_HEIGHT;
+    }
+    restartGame(gridWidth, gridHeight, 0.15);
+}
 
 // Function to clear all children and populate the grid
-function createGrid(width, height, mineChance) {
+function restartGame(width, height, mineChance) {
+    updateTimer(0);
     gameOver = false;
+    timeElapsed = 0;
+    mineCells = [];
 
     // Get the grid element by its ID
     const grid = document.getElementById('grid');
@@ -45,7 +80,11 @@ function createGrid(width, height, mineChance) {
                     return;
                 }
                 event.preventDefault(); // Prevent the default context menu
-                cell.classList.add('flagged');
+                if (cell.classList.contains('flagged')) {
+                    cell.classList.remove('flagged');
+                } else {
+                    cell.classList.add('flagged');
+                }
             });
 
             if (Math.random() < mineChance) {
@@ -145,8 +184,6 @@ function cellClicked(cell) {
     }
 }
 
-let timerElements = false;
-
 function updateTimer(number) {
     if (!timerElements) {
         timerElements = {
@@ -168,7 +205,6 @@ function updateTimer(number) {
     timerElements.ones.src = `./assets/timer_${ones}.png`;
 }
 
-let timeElapsed = 0;
 setInterval(() => {
     if (!gameOver) {
         updateTimer(timeElapsed++);

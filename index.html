@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Minesweeper</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Doto">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Doto:wght@100..900">
     <link rel="stylesheet" type="text/css" href="main.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
 </head>
@@ -18,6 +18,21 @@
         <img src="./assets/timer_0.png" id="timer_tens"/>
         <img src="./assets/timer_0.png" id="timer_ones"/>
     </div>
+    <h1 id="header">MINESWEEPER</h1>
+
+    <div id="size-box">
+        <label>Width: </label>
+        <button id="grid-width-decrease" onclick="changeWidth(-1)">-</button>
+        <label id="grid-width-counter">16</label>
+        <button id="grid-width-increase" onclick="changeWidth(1)">+</button>
+        <br>
+        <label>Height: </label>
+        <button id="grid-height-decrease" onclick="changeHeight(-1)">-</button>
+        <label id="grid-height-counter">16</label>
+        <button id="grid-height-increase" onclick="changeHeight(1)">+</button>
+    </div>
+
+    <button onclick="restartGame(16, 16, 0.15)">Restart</button>
     <div id="grid">
     </div>
   </body>

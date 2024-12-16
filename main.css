@@ -1,5 +1,47 @@
 body {
     background-color: #808080;
+    
+    font-family: "Doto", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "ROND" 0;
+}
+
+button {
+    font-family: "Doto", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+    font-variation-settings: "ROND" 0;
+
+    border: 0px;
+
+    background: url("./assets/tile.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+button:active {
+    background: url("./assets/tile_pressed.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Doto";
+}
+
+h3 {
+    display: inline-block;
+}
+
+#size-box .div {
+    width: min-content;
 }
 
 #grid {
