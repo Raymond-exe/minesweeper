@@ -1,6 +1,8 @@
 
 const mineCells = [];
 
+let gameOver;
+
 function getCell(x, y) {
     const grid = document.getElementById('grid');
     for (const cell of grid.children) {
@@ -30,6 +32,7 @@ function getStatus(x, y) {
 }
 
 function mineClicked() {
+    gameOver = true;
     for (const mine of mineCells) {
         const cell = getCell(mine.x, mine.y);
         let img = '';
@@ -49,6 +52,8 @@ function mineClicked() {
 
 // Function to clear all children and populate the grid
 function createGrid(width, height, mineChance) {
+    gameOver = false;
+
     // Get the grid element by its ID
     const grid = document.getElementById('grid');
     grid.columns = width;
@@ -80,6 +85,9 @@ function createGrid(width, height, mineChance) {
 
             // right-click callback
             cell.addEventListener('contextmenu', (event) => {
+                if (gameOver) {
+                    return;
+                }
                 event.preventDefault(); // Prevent the default context menu
                 cell.classList.add('flagged');
             });
@@ -98,7 +106,7 @@ function createGrid(width, height, mineChance) {
 }
 
 function cellClicked(cell) {
-    if (cell.classList.contains('clicked')) {
+    if (gameOver || cell.classList.contains('clicked')) {
         return;
     }
     cell.classList.add('clicked');
@@ -108,19 +116,19 @@ function cellClicked(cell) {
     let img = '';
     switch (count) {
         case -1:
-            img = 'bomb'; break;
+            img = 'bomb_red';
+            mineClicked();
+            break;
         case 0:
-            img = 'empty'; break;
+            img = 'empty';
+            break;
         default:
-            img = `tile_${count}`; break;
+            img = `tile_${count}`;
+            break;
     }
 
     if (img) {
         cell.style.backgroundImage = `url('./assets/${img}.png')`;
-    }
-
-    if (count === -1) {
-        mineClicked();
     }
 
     if (count === 0) {
