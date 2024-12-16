@@ -1,0 +1,30 @@
+body {
+    background-color: #808080;
+}
+
+#grid {
+    font-size: 0;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 0px;
+    display: inline-block;
+
+    padding: 0;
+    margin: 0;
+
+    background: url("./assets/tile.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.cell.flagged {
+    background: url("./assets/flag.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
