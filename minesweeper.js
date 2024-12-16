@@ -9,7 +9,7 @@ function getCell(x, y) {
             return cell;
         }
     }
-    console.log(`Failed to get cell (${x}, ${y})`);
+    // console.log(`Failed to get cell (${x}, ${y})`);
     return null;
 }
 
@@ -30,15 +30,21 @@ function getStatus(x, y) {
 }
 
 function mineClicked() {
-    const grid = document.getElementById('grid');
-    for (const cell of grid.children) {
-        // console.log(cell);
-        if (cell.x === x && cell.y === y) {
-            return cell;
+    for (const mine of mineCells) {
+        const cell = getCell(mine.x, mine.y);
+        let img = '';
+        if (cell.classList.contains('clicked')) {
+            img = 'bomb_red';
+        } else if (cell.classList.contains('flagged')) {
+            img = 'bomb_x';
+        } else {
+            img = 'bomb';
+        }
+
+        if (img) {
+            cell.style.backgroundImage = `url('./assets/${img}.png')`;
         }
     }
-    console.log(`Failed to get cell (${x}, ${y})`);
-    return null;
 }
 
 // Function to clear all children and populate the grid
@@ -108,7 +114,14 @@ function cellClicked(cell) {
         default:
             img = `tile_${count}`; break;
     }
-    cell.style.backgroundImage = `url('./assets/${img}.png')`;
+
+    if (img) {
+        cell.style.backgroundImage = `url('./assets/${img}.png')`;
+    }
+
+    if (count === -1) {
+        mineClicked();
+    }
 
     if (count === 0) {
         for (let dy = -1; dy <= 1; dy++) {
