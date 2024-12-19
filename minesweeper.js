@@ -184,6 +184,29 @@ function startGame(width, height, mineChance) {
     }
 }
 
+function endGame(win) {
+    if (gameOver) {
+        return;
+    }
+
+    // force-assign images for all cells to prevent click feedbacks
+    const grid = document.getElementById('grid');
+    if (grid) {
+        for (const cell of grid.children) {
+            if (!cell.classList.contains('clicked') && !cell.classList.contains('flagged')) {
+                cell.style.backgroundImage = 'url(\'./assets/tile.png\')';
+            }
+        }
+    }
+
+    gameOver = true;
+    if (win) { // TODO win/loss logic
+        console.log('Win!');
+    } else {
+        console.log('Loss!');
+    }
+}
+
 function getCell(x, y) {
     const grid = document.getElementById('grid');
     for (const cell of grid.children) {
@@ -195,7 +218,7 @@ function getCell(x, y) {
 }
 
 // returns number of nearby mines, or -1 if coords contain a mine
-function getStatus(x, y) {
+function getNearbyMines(x, y) {
     let mineCount = 0;
     for (const cell of mineCells) {
         if (x === cell.x && y === cell.y) {
@@ -211,8 +234,7 @@ function getStatus(x, y) {
 }
 
 function mineClicked() {
-    console.log('Loss!');
-    gameOver = true;
+    endGame(false);
     for (const mine of mineCells) {
         const cell = getCell(mine.x, mine.y);
         let img = '';
@@ -237,7 +259,7 @@ function cellClicked(cell) {
     cell.classList.add('clicked');
     const x = parseInt(cell.x);
     const y = parseInt(cell.y);
-    const count = getStatus(x, y);
+    const count = getNearbyMines(x, y);
     let img = '';
     switch (count) {
         case -1:
@@ -270,8 +292,7 @@ function cellClicked(cell) {
     }
 
     if (!gameOver && isGridComplete()) {
-        console.log('Win!');
-        gameOver = true;
+        endGame(true);
     }
 }
 
