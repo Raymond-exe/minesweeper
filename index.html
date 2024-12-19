@@ -23,7 +23,7 @@
         <h1 id="header">MINESWEEPER</h1>
         <h3 style="margin-top:0;">Written by <a href="https://github.com/raymond-exe">@raymond-exe</a></h3>
         <div id="settings" style="height:100px;">
-            <h4 style="margin-top: 0;">Custom Difficulty Settings</h4>
+            <h4 style="margin-top:0; margin-bottom:10px;">Custom Difficulty Settings</h4>
             <label>Width: </label>
             <button onclick="changeWidth(-1)">-</button>
             <label id="grid-width-counter">16</label>
@@ -55,7 +55,11 @@
         <button class="button-wide" onclick="restart()">Restart</button>
 
         <br><br>
-        <div id="grid">
+        <div id="grid"></div>
+
+        <div id="game-over-cover">
+            <h1 id="game-over-title"></h1>
+            <h3 id="game-over-subtitle"></h3>
         </div>
     </div>
   </body>

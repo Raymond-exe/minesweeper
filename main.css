@@ -61,14 +61,34 @@ h3 {
     width: min-content;
 }
 
+#game-over-cover {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.75s;
+
+    color: white;
+    opacity: 0;
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#game-over-cover * {
+    margin: 0;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 #grid {
-    /* position: absolute; */
-    /* left: 50%; */
-    /* transform: translateX(-50%); */
-    /* top: 50%; */
-    /* transform: translateX(-50%) translateY(-50%); */
+    overflow: auto;
+    white-space: nowrap;
     font-size: 0;
-    /* width: fit-content; */
+    transition: all 0.75s;
 }
 
 .cell {
@@ -98,6 +118,7 @@ h3 {
     top: 2.5%;
     left: 2.5%;
     font-size: 0;
+    z-index: 5;
 }
 
 #timer img {

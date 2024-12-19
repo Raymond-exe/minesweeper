@@ -1,8 +1,8 @@
 
 const MIN_WIDTH = 1;
-const MAX_WIDTH = 32;
+const MAX_WIDTH = 64;
 const MIN_HEIGHT = 1;
-const MAX_HEIGHT = 32;
+const MAX_HEIGHT = 64;
 const MIN_DIFFICULTY = 1;
 const MAX_DIFFICULTY = 9;
 
@@ -77,20 +77,21 @@ function changeDifficulty(num) {
 
 // returns true if win condition is met, false otherwise
 function isGridComplete() {
-    const grid = document.getElementById('grid');
-    const cellCount = gridWidth * gridHeight;
+    return countClickedCells() === countSafeCells();
+}
+
+function countClickedCells() {
     let clicked = 0;
     for (const cell of grid.children) {
         if (cell.classList.contains('clicked')) {
             clicked++;
         }
     }
+    return clicked;
+}
 
-    if (clicked === (cellCount - mineCells.length)) {
-        return true;
-    } else {
-        return false;
-    }
+function countSafeCells() {
+    return (gridWidth * gridHeight) - mineCells.length;
 }
 
 function toggleSettings() {
@@ -134,6 +135,13 @@ function startGame(width, height, mineChance) {
     const grid = document.getElementById('grid');
     grid.columns = width;
     grid.rows = height;
+    grid.style.opacity = 1.0;
+
+    const gameOverElement = document.getElementById('game-over-cover');
+    if (gameOverElement) {
+        gameOverElement.style.opacity = 0;
+        gameOverElement.style.zIndex = -1;
+    }
 
     if (!grid) {
         console.error('Element with ID \'grid\' not found.');
@@ -197,14 +205,25 @@ function endGame(win) {
                 cell.style.backgroundImage = 'url(\'./assets/tile.png\')';
             }
         }
+        grid.style.opacity = 0.4;
+    }
+
+    const gameOverElement = document.getElementById('game-over-cover');
+    const gameOverTitle = document.getElementById('game-over-title');
+    const gameOverSubtitle = document.getElementById('game-over-subtitle');
+
+    gameOverElement.style.opacity = 1.0;
+    gameOverElement.style.zIndex = 3;
+    if (win) {
+        gameOverTitle.innerHTML = 'YOU WIN!';
+        gameOverSubtitle.innerHTML = `You cleared ${countSafeCells()} cells in ${timeElapsed} seconds<br>Customize your difficulty in \'Settings\'`;
+    } else {
+        const percent = ((countClickedCells() - 1) / countSafeCells()) * 100; // subtract one since they clicked on the mine
+        gameOverTitle.innerHTML = 'GAME OVER';
+        gameOverSubtitle.innerHTML = `You lasted ${timeElapsed} seconds and safely cleared ${Math.round(percent)}% of the minefield<br>Try again by clicking \'Restart\'`;
     }
 
     gameOver = true;
-    if (win) { // TODO win/loss logic
-        console.log('Win!');
-    } else {
-        console.log('Loss!');
-    }
 }
 
 function getCell(x, y) {
@@ -319,6 +338,6 @@ function updateTimer(number) {
 
 setInterval(() => {
     if (!gameOver) {
-        updateTimer(timeElapsed++);
+        updateTimer(++timeElapsed);
     }
 }, 1000);
