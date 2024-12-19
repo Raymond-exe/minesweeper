@@ -1,20 +1,48 @@
 
 const MIN_WIDTH = 1;
-const MAX_WIDTH = 20;
+const MAX_WIDTH = 32;
 const MIN_HEIGHT = 1;
-const MAX_HEIGHT = 20;
+const MAX_HEIGHT = 32;
+const MIN_DIFFICULTY = 1;
+const MAX_DIFFICULTY = 9;
+
+const DEFAULT_DIFFICULTY = 1;
 
 let mineCells = [];
 
 let gridWidth = 16;
 let gridHeight = 16;
+let difficulty = 1;
 let gameOver = false;
 let timeElapsed = 0;
 let timerElements = false;
 
 setTimeout(() => {
-    restartGame(gridWidth, gridHeight, 0.2);
+    setDifficultyLevel(DEFAULT_DIFFICULTY);
+    toggleSettings();
+    restart();
 }, 1);
+
+function setDifficultyLevel(level) {
+    switch(level) {
+        case 1:
+            gridWidth = 8;
+            gridHeight = 8;
+            difficulty = 2;
+            break;
+        case 2:
+            gridWidth = 12;
+            gridHeight = 12;
+            difficulty = 3;
+            break;
+        case 3:
+            gridWidth = 16;
+            gridHeight = 16;
+            difficulty = 3;
+            break;
+    }
+    restart();
+}
 
 function changeWidth(dx) {
     gridWidth += dx;
@@ -24,7 +52,8 @@ function changeWidth(dx) {
     if (gridWidth > MAX_WIDTH) {
         gridWidth = MAX_WIDTH;
     }
-    restartGame(gridWidth, gridHeight, 0.15);
+
+    restart();
 }
 
 function changeHeight(dy) {
@@ -35,11 +64,71 @@ function changeHeight(dy) {
     if (gridHeight > MAX_HEIGHT) {
         gridHeight = MAX_HEIGHT;
     }
-    restartGame(gridWidth, gridHeight, 0.15);
+
+    restart();
+}
+
+function changeDifficulty(num) {
+    difficulty += num;
+    difficulty = Math.min(MAX_DIFFICULTY, Math.max(difficulty, MIN_DIFFICULTY));
+
+    restart();
+}
+
+function isGridComplete() {
+    const grid = document.getElementById('grid');
+    for (const cell of grid.children) {
+        const isMine = (mineCells.indexOf({ x: cell.x, y: cell.y }) >= 0);
+        const isClicked = cell.classList.contains('clicked');
+        console.log(`(${cell.x}, ${cell.y})`);
+        if (isMine) {
+            console.log(`${cell.x}, ${cell.y} is a mine`);
+            if (isClicked) {
+                return false;
+            }
+        } else {
+            if (!isClicked) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+function toggleSettings() {
+    const settingsDiv = document.getElementById('settings');
+    const difficultyDiv = document.getElementById('difficulty');
+    if (settingsDiv.style.display) {
+        settingsDiv.style.display = '';
+        difficultyDiv.style.display = 'none';
+    } else {
+        settingsDiv.style.display = 'none';
+        difficultyDiv.style.display = '';
+    }
+    console.log(settingsDiv.style.display);
+}
+
+
+function restart() {
+    const widthLabel = document.getElementById('grid-width-counter');
+    const heightLabel = document.getElementById('grid-height-counter');
+    const difficultyLabel = document.getElementById('difficulty-label');
+
+    if (widthLabel) {
+        widthLabel.innerHTML = gridWidth;
+    }
+    if (heightLabel) {
+        heightLabel.innerHTML = gridHeight;
+    }
+    if (difficultyLabel) {
+        difficultyLabel.innerHTML = difficulty;
+    }
+    startGame(gridWidth, gridHeight, difficulty / 20.0);
 }
 
 // Function to clear all children and populate the grid
-function restartGame(width, height, mineChance) {
+function startGame(width, height, mineChance) {
     updateTimer(0);
     gameOver = false;
     timeElapsed = 0;
@@ -177,10 +266,14 @@ function cellClicked(cell) {
                     continue;
                 }
                 try {
-                    cellClicked(getCell(x + dx, y + dy));
-                } catch (e) {} // hush
+                    setTimeout(() => cellClicked(getCell(x + dx, y + dy)), 25); // cool ripple effect
+                } catch (e) {} // hush thyself
             }
         }
+    }
+
+    if (isGridComplete()) {
+        gameOver = true;
     }
 }
 

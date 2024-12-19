@@ -18,22 +18,44 @@
         <img src="./assets/timer_0.png" id="timer_tens"/>
         <img src="./assets/timer_0.png" id="timer_ones"/>
     </div>
-    <h1 id="header">MINESWEEPER</h1>
 
-    <div id="size-box">
-        <label>Width: </label>
-        <button id="grid-width-decrease" onclick="changeWidth(-1)">-</button>
-        <label id="grid-width-counter">16</label>
-        <button id="grid-width-increase" onclick="changeWidth(1)">+</button>
+    <div id="main">
+        <h1 id="header">MINESWEEPER</h1>
+        <div id="settings" style="height:100px;">
+            <h3 style="margin-top: 0;">Custom Difficulty Settings</h3>
+            <br>
+            <label>Width: </label>
+            <button onclick="changeWidth(-1)">-</button>
+            <label id="grid-width-counter">16</label>
+            <button onclick="changeWidth(1)">+</button>
+            <br>
+            <label>Height: </label>
+            <button onclick="changeHeight(-1)">-</button>
+            <label id="grid-height-counter">16</label>
+            <button onclick="changeHeight(1)">+</button>
+            <br>
+            <label>Difficulty: </label>
+            <button onclick="changeDifficulty(-1)">-</button>
+            <label id="difficulty-label">1</label>
+            <button onclick="changeDifficulty(1)">+</button>
+        </div>
+
+        <div id="difficulty" style="height:100px;">
+            <button class="button-wide" onclick="setDifficultyLevel(1)">Easy</button>
+            <br>
+            <button class="button-wide" onclick="setDifficultyLevel(2)">Normal</button>
+            <br>
+            <button class="button-wide" onclick="setDifficultyLevel(3)">Hard</button>
+            <br>
+        </div>
+
         <br>
-        <label>Height: </label>
-        <button id="grid-height-decrease" onclick="changeHeight(-1)">-</button>
-        <label id="grid-height-counter">16</label>
-        <button id="grid-height-increase" onclick="changeHeight(1)">+</button>
-    </div>
 
-    <button onclick="restartGame(16, 16, 0.15)">Restart</button>
-    <div id="grid">
+        <button class="button-wide" onclick="toggleSettings()">Settings</button>
+        <button class="button-wide" onclick="restart()">Restart</button>
+
+        <br><br>
+        <div id="grid">
     </div>
   </body>
 </html>

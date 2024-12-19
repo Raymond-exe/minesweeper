@@ -9,11 +9,15 @@ body {
 }
 
 button {
+    height: 20px;
+    width: 20px;
     font-family: "Doto", serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
     font-variation-settings: "ROND" 0;
+
+    /* vertical-align: center; */
 
     border: 0px;
 
@@ -29,27 +33,42 @@ button:active {
     image-rendering: crisp-edges;
 }
 
-h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: "Doto";
+.button-wide {
+    height: 32px;
+    width: 96px;
+    background: url("./assets/tile_wide.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.button-wide:active {
+    background: url("./assets/tile_wide_pressed.png") no-repeat scroll 0 0 transparent;
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 h3 {
     display: inline-block;
 }
 
-#size-box .div {
+#main {
+    text-align: center;
+}
+
+#main .div {
     width: min-content;
 }
 
 #grid {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    /* position: absolute; */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    /* top: 50%; */
+    /* transform: translateX(-50%) translateY(-50%); */
     font-size: 0;
+    /* width: fit-content; */
 }
 
 .cell {
@@ -75,6 +94,9 @@ h3 {
 }
 
 #timer {
+    position: fixed;
+    top: 2.5%;
+    left: 2.5%;
     font-size: 0;
 }
 
