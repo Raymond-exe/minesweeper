@@ -75,25 +75,22 @@ function changeDifficulty(num) {
     restart();
 }
 
+// returns true if win condition is met, false otherwise
 function isGridComplete() {
     const grid = document.getElementById('grid');
+    const cellCount = gridWidth * gridHeight;
+    let clicked = 0;
     for (const cell of grid.children) {
-        const isMine = (mineCells.indexOf({ x: cell.x, y: cell.y }) >= 0);
-        const isClicked = cell.classList.contains('clicked');
-        console.log(`(${cell.x}, ${cell.y})`);
-        if (isMine) {
-            console.log(`${cell.x}, ${cell.y} is a mine`);
-            if (isClicked) {
-                return false;
-            }
-        } else {
-            if (!isClicked) {
-                return false;
-            }
+        if (cell.classList.contains('clicked')) {
+            clicked++;
         }
     }
 
-    return true;
+    if (clicked === (cellCount - mineCells.length)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function toggleSettings() {
@@ -106,7 +103,6 @@ function toggleSettings() {
         settingsDiv.style.display = 'none';
         difficultyDiv.style.display = '';
     }
-    console.log(settingsDiv.style.display);
 }
 
 
@@ -161,7 +157,7 @@ function startGame(width, height, mineChance) {
             grid.appendChild(cell);
 
             // left-click callback
-            cell.onclick = (event) => cellClicked(cell);
+            cell.onclick = () => cellClicked(cell);
 
             // right-click callback
             cell.addEventListener('contextmenu', (event) => {
@@ -176,6 +172,7 @@ function startGame(width, height, mineChance) {
                 }
             });
 
+            // TODO replace this, not consistent enough
             if (Math.random() < mineChance) {
                 mineCells.push({ x: x, y: y });
             }
@@ -194,7 +191,6 @@ function getCell(x, y) {
             return cell;
         }
     }
-    // console.log(`Failed to get cell (${x}, ${y})`);
     return null;
 }
 
@@ -215,6 +211,7 @@ function getStatus(x, y) {
 }
 
 function mineClicked() {
+    console.log('Loss!');
     gameOver = true;
     for (const mine of mineCells) {
         const cell = getCell(mine.x, mine.y);
@@ -234,7 +231,7 @@ function mineClicked() {
 }
 
 function cellClicked(cell) {
-    if (gameOver || cell.classList.contains('clicked')) {
+    if (gameOver || cell === null || cell.classList.contains('clicked')) {
         return;
     }
     cell.classList.add('clicked');
@@ -272,7 +269,8 @@ function cellClicked(cell) {
         }
     }
 
-    if (isGridComplete()) {
+    if (!gameOver && isGridComplete()) {
+        console.log('Win!');
         gameOver = true;
     }
 }
